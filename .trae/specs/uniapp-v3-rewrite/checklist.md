@@ -11,7 +11,7 @@
 - [ ] Sass 版本为 ^1.99.0（与 wot-starter v2.0.0 锁定版本一致），vite.config.ts 已配置 modern-compiler API
 - [ ] 组件自动导入配置确认指向 @wot-ui/ui（wot-starter v2.0.0 已预配置）
 - [ ] tsconfig.json 中 Volar 类型引用正确，并添加 `uni-echarts/global`
-- [ ] @uni-helper/uni-network、dayjs、lodash-es 已安装
+- [ ] @uni-helper/uni-network、dayjs、lodash-es 已安装。注意：@uni-helper/uni-network npm 公共仓库最新版本为 0.21.x，如安装失败需确认版本可用性；dayjs 仅用于需要链式操作/插件扩展的场景，简单格式化优先使用 @vueuse/core；lodash-es 仅用于 @vueuse 未覆盖的深拷贝/复杂对象操作等场景
 - [ ] echarts ^6.x、uni-echarts 已安装
 
 ## wot-starter 核心依赖
@@ -47,7 +47,7 @@
 - [ ] 请求去重功能（相同请求自动取消前一次）
 - [ ] 响应拦截器自动识别 `__abp` 标记并解包 AjaxResponse.result
 - [ ] 响应拦截器统一处理错误 UI 提示（UserFriendlyException 弹 Toast、BatchOperationException 弹 Modal、401 跳登录、403 弹权限提示、网络/超时弹对应提示）
-- [ ] 请求选项支持 `silent: true`，开启后拦截器不自动弹错误提示，覆盖所有异常类型（UserFriendlyException、NetworkException、TimeoutException 等）
+- [ ] 请求选项支持 `silent: true`（需在 RequestOptions 接口中新增 `silent?: boolean` 字段），开启后拦截器不自动弹错误提示，覆盖所有异常类型（UserFriendlyException、NetworkException、TimeoutException 等）
 - [ ] 401/403 响应正确抛出 UnauthorizedException/ForbiddenException
 - [ ] 非 success 响应正确抛出 UserFriendlyException
 - [ ] 批量操作响应正确抛出 BatchOperationException
@@ -69,6 +69,12 @@
 - [ ] Store 使用 Setup Store 语法（defineStore + Composition API）
 - [ ] Store 文件位于 `src/store/` 目录（遵循 wot-starter 单数命名约定）
 
+## Composables
+- [ ] `src/composables/useAuth.ts`：登录（调用 auth API）、登出（调用 userStore.logout）、Token 管理、returnUrl 处理
+- [ ] `src/composables/useMenu.ts`：响应式读取菜单数据（从 appStore）、底部/侧边菜单过滤、菜单项导航、激活状态判断
+- [ ] 所有 composables 使用 Composition API 风格，有完整 TypeScript 类型
+- [ ] Composables 由 AutoImport 自动导入（wot-starter 的 unplugin-auto-import 配置中 `dirs: ['src/composables']`），无需手动 import
+
 ## 菜单工具
 - [ ] normalizeMenuUrl 正确将 URL 转为平铺页面路由路径，不使用 `/index` 后缀（例如 `/login` → `/pages/login`）
 - [ ] filterBottomMenus 正确过滤 mobileShowModel === 2 的菜单项
@@ -79,7 +85,7 @@
 ## API 接口层
 - [ ] auth.ts 定义 AuthenticateModel、AuthenticateResultModel 类型和 authenticate 函数
 - [ ] session.ts 定义 GetCurrentLoginInformationsOutput 类型和 getCurrentLoginInformations 函数
-- [ ] config.ts 定义 AbpUserConfigurationDto 及所有子类型，getUserConfiguration 函数。AbpUserNavConfigDto 字段名为 `menus: MenuDto`（复数，直接使用 MenuDto 类型），已修正现有代码 `menu: any[]`（单数）的 bug，调用方无需 `as MenuDto` 强制断言
+- [ ] config.ts 定义 AbpUserConfigurationDto 及所有子类型，getUserConfiguration 函数。AbpUserNavConfigDto 字段名为 `menus: MenuDto`（复数，MenuDto 为键值对接口，等价于 `Record<string, MenuGroupDto | undefined>`，而非数组），已修正现有代码 `menu: any[]`（单数且类型为数组）的 bug，与 ASP.NET Boilerplate 源码中 `Dictionary<string, UserMenu>` 的后端类型一致，调用方无需 `as MenuDto` 强制断言
 - [ ] captcha.ts 定义验证码相关 API
 
 ## 应用初始化服务
@@ -89,9 +95,9 @@
 - [ ] reinitialize：设置新 API 地址 → 重新初始化 → 跳转首页
 
 ## 路由配置
-- [ ] @wot-ui/router 导航守卫（beforeEach / afterEach）正确配置，登录状态检查生效
+- [ ] @wot-ui/router 路由拦截（beforeEach / afterEach）正确配置，登录状态检查生效。注：@wot-ui/router 基于 uni-app 路由能力提供近 Vue Router 风格的编程式导航与路由拦截，非声明式路由守卫
 - [ ] router/index.ts 仅包含导航守卫和路由实例导出，不包含路由表定义（路由映射由文件路由自动生成）
-- [ ] 页面级 meta（layout、requiresAuth、title）通过 pages.config.ts 或页面文件自身配置
+- [ ] 页面级 meta（layout、requiresAuth、title）通过页面组件的 `<route>` 块或文件层级声明（wot-starter 的 @uni-helper/vite-plugin-uni-layouts 布局系统通过页面文件所在目录名或 `<route>` 块中的 layout 字段自动匹配布局），不通过 pages.config.ts 定义页面路由
 
 ## 布局系统
 - [ ] default.vue 布局使用 Wot UI 组件（wd-navbar、wd-tabbar、wd-popup）构建
@@ -127,7 +133,8 @@
 - [ ] uni.scss 全局 SCSS 变量已配置
 
 ## 图表库
-- [ ] uni-echarts Vite 插件（UniEcharts）已配置
+- [ ] uni-echarts Vite 插件（UniEcharts，从 `uni-echarts/vite` 导入）已在 vite.config.ts 中配置
+- [ ] uni-echarts 组件 Resolver（UniEchartsResolver，从 `uni-echarts/resolver` 导入）已在 UniHelperComponents 的 resolvers 中配置
 - [ ] vite.config.ts 中 optimizeDeps 排除 uni-echarts
 - [ ] uni-echarts 组件可在 H5 和小程序端正常渲染图表
 - [ ] echarts 已安装（uni-echarts 封装了 echarts 实例创建，无需额外的按需引入配置）

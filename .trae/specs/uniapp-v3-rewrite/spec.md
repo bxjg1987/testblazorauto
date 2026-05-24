@@ -25,7 +25,7 @@
 ### 选型原则
 1. 优先选择官方/社区维护活跃的库
 2. 必须支持 Vue3 + TypeScript
-3. 必须兼容 uniapp 多端（H5、微信小程序、Android、iOS）
+3. 必须兼容 uniapp 多端（H5、微信小程序、Android、iOS）。注意：wot-starter v2.0.0 的 package.json 中已包含 `@dcloudio/uni-app-harmony` 和 `@dcloudio/uni-mp-harmony`，即已支持鸿蒙平台，如项目不需要鸿蒙支持可在清理示例代码时移除相关依赖
 4. 优先选择已在现有项目中验证过的库
 5. 参考 wot-starter 的生态整合经验
 
@@ -40,18 +40,24 @@
 | UI 组件 | Wot UI（@wot-ui/ui） | V2 latest | 80+ 高质量组件，AI 友好设计，支持国际化/暗黑模式/CSS 变量主题定制 |
 | CSS 方案 | UnoCSS | latest | 原子化 CSS，wot-starter 默认方案，高性能 |
 | CSS 预处理器 | Sass | ^1.99.0 | Wot UI V2 依赖，SCSS 语法用于 uni.scss 全局变量。与 wot-starter v2.0.0 保持一致 |
-| 网络请求 | @uni-helper/uni-network | latest | axios 风格 API，已在项目中验证，TypeScript 支持良好 |
+| 网络请求 | @uni-helper/uni-network | latest | axios 风格 API，已在项目中验证，TypeScript 支持良好。注意：npm 公共仓库最新版本为 0.21.x，现有项目使用的 0.23.x 可能来自其他注册源，新项目安装时需确认版本可用性 |
 | 状态管理 | Pinia | ^2.x | Vue3 官方推荐 |
-| 路由增强 | @wot-ui/router | latest | Vue Router 风格 API，声明式路由守卫 |
-| 日期处理 | dayjs | latest | 轻量级，替代 moment |
+| 路由增强 | @wot-ui/router | latest | 基于 uni-app 路由能力，提供近 Vue Router 风格的编程式导航与路由拦截 |
+| 日期处理 | dayjs | latest | 轻量级日期库，用于 ABP 后端时间戳格式化、相对时间显示、日期范围计算等场景。简单格式化可使用 @vueuse/core 的 useDateFormat 或原生 Intl.DateTimeFormat，dayjs 仅在需要链式操作、插件扩展（如 relativeTime、utc）时引入 |
 | 图表库 | uni-echarts + echarts | uni-echarts ^2.x, echarts ^6.x | 适用于 uni-app 的 ECharts 组件，多端兼容，TypeScript 友好 |
 | 国际化 | vue-i18n | ^9.x | Wot UI 国际化能力的基础依赖，wot-starter 已预装 |
 | 组合式工具 | @vueuse/core | ^11.x | Vue Composition API 工具集，wot-starter 已预装且 AutoImport 自动导入 |
 | 平台 UnoCSS 规则 | @uni-helper/unocss-preset-uni | latest | uni-app 平台特定的 UnoCSS 规则，与 @wot-ui/unocss-preset 配合使用 |
+| Wot UI UnoCSS 预设 | @wot-ui/unocss-preset | 1.0.0 稳定版 | Wot UI 官方 UnoCSS 预设，将 Wot UI 设计 token 映射为原子类。wot-starter 自带 beta 版，需升级到 1.0.0 稳定版 |
 | 根组件插件 | @uni-ku/root | latest | wot-starter 用于模拟 App.vue 能力的根组件插件（devDependency） |
-| 分包优化 | @uni-ku/bundle-optimizer | latest | 微信小程序分包优化插件（devDependency） |
-| 工具函数 | lodash-es | latest | 按需引入，tree-shakeable |
+| 分包优化 | @uni-ku/bundle-optimizer | latest | uni-app 分包优化与异步跨包引用插件，支持分包优化、模块异步跨包调用、组件异步跨包引用（devDependency） |
+| 工具函数 | lodash-es | latest | 按需引入，tree-shakeable。注意：项目已引入 @vueuse/core 提供大量实用工具函数，lodash-es 仅用于 @vueuse 未覆盖的深拷贝（cloneDeep）、复杂对象操作（merge、pick）等场景，非通用工具需求优先使用 @vueuse/core 或原生方法 |
 | 代码质量 | ESLint + @uni-helper/eslint-config | latest | wot-starter 默认配置 |
+| 文件路由 | @uni-helper/vite-plugin-uni-pages | latest | 基于文件系统自动生成路由配置，wot-starter 已预装（devDependency） |
+| 布局系统 | @uni-helper/vite-plugin-uni-layouts | latest | 类 Nuxt 的布局系统，wot-starter 已预装（devDependency） |
+| 组件自动导入 | @uni-helper/vite-plugin-uni-components | latest | 按需自动引入组件，配合 resolver.ts 实现 Wot UI 组件自动注册（devDependency） |
+| API 自动导入 | unplugin-auto-import | latest | Composition API 无需手动 import，wot-starter 已预装（devDependency） |
+| Manifest 生成 | @uni-helper/vite-plugin-uni-manifest | latest | 由 manifest.config.ts 自动生成 manifest.json，wot-starter 已预装（devDependency） |
 
 ### 不推荐的技术（已排除）
 
@@ -72,7 +78,7 @@
 - API 自动导入（unplugin-auto-import，Composition API 无需手动 import）
 - UnoCSS 原子化 CSS 引擎（uno.config.ts 同时使用 @wot-ui/unocss-preset 和 @uni-helper/unocss-preset-uni 双重预设，前者提供 Wot UI 主题原子类，后者处理 uni-app 平台的 UnoCSS 兼容规则。启动模板自带的 @wot-ui/unocss-preset 为 beta 版，需升级到 1.0.0 稳定版）
 - 图标集支持（@unocss/preset-icons，100000+ 图标可用）
-- 图表组件（uni-echarts，基于 Apache ECharts，多端兼容）
+- 图表组件（uni-echarts，基于 Apache ECharts，多端兼容。wot-starter 在 vite.config.ts 中同时配置了 Vite 插件 `UniEcharts()`（从 `uni-echarts/vite` 导入）和组件 Resolver `UniEchartsResolver()`（从 `uni-echarts/resolver` 导入），前者负责 ECharts 实例创建，后者负责 uni-echarts 组件的自动按需注册）
 - CSS 变量主题定制（theme.json）
 - ESM 配置文件（pages.config.ts、manifest.config.ts、uno.config.ts、vite.config.ts）
 
@@ -96,7 +102,7 @@
 
 #### Scenario: 替换网络库
 - **WHEN** 项目创建完成后
-- **THEN** 移除 wot-starter 自带的 Alova，安装并配置 @uni-helper/uni-network
+- **THEN** 移除 wot-starter 自带的 Alova，安装并配置 @uni-helper/uni-network。具体步骤：1) 卸载 `@alova/adapter-uniapp`、`@alova/mock`、`@alova/shared`、`alova`、`@alova/wormhole` 等相关依赖；2) 删除根目录下的 `alova.config.ts` 配置文件；3) 安装 `@uni-helper/uni-network`；4) 重写 `src/utils/http.ts`，将所有基于 Alova 的 API 调用方式替换为 @uni-helper/uni-network 的 axios 风格 API；5) 重写 `src/api/` 下所有接口文件，使用新的 http 工具函数
 
 #### Scenario: 安装额外工具依赖
 - **WHEN** 项目创建完成后
@@ -124,9 +130,9 @@
     │   ├── session.ts
     │   ├── config.ts
     │   └── ...
-    ├── components/       # 可复用组件（自动按需导入）
-    │   ├── common/       # 通用组件（PageLayout, Modal 等）
-    │   └── business/     # 业务组件
+    ├── business/          # 业务组件（wot-starter 约定，与 components/ 平级，vite.config.ts 中 dirs 配置为 ['src/components', 'src/business']）
+    ├── components/        # 可复用通用组件（自动按需导入）
+    │   ├── common/        # 通用组件（PageLayout, Modal 等）
     ├── composables/      # Vue Composables（可组合函数）
     ├── layouts/          # 布局组件（wot-starter 布局系统）
     │   └── default.vue   # 默认布局
@@ -145,7 +151,7 @@
     ├── utils/            # 工具函数
     ├── App.vue           # 应用入口
     ├── main.ts           # 启动文件
-    ├── resolver.ts       # Wot UI 组件解析器（vite.config.ts 引用）
+    ├── resolver.ts       # Wot UI 组件解析器（供 vite.config.ts 中 @uni-helper/vite-plugin-uni-components 引用，实现 Wot UI 组件的自动按需注册，无需手动 import 组件）
     ├── pages.json        # 页面配置（由 pages.config.ts 生成）
     ├── manifest.json     # 应用配置
     ├── theme.json        # Wot UI 主题变量
@@ -168,7 +174,7 @@
 ### Requirement: ABP 后端对接封装
 系统 SHALL 封装与 ABP 后端的标准交互模式，包括 AjaxResponse 解析、JWT 认证、ABP 配置获取、动态菜单处理。
 
-ABP 配置字段名说明：ABP 后端 `AbpUserConfigurationDto` 中的导航菜单 JSON 字段名为 `menus`（复数）。现有代码中 `AbpUserNavConfigDto` 错误地定义了 `menu: any[]`（单数），导致调用方被迫使用 `config.nav?.menus as MenuDto` 的强制断言来弥补类型不一致。重构时必须修正为 `menus: MenuDto`（直接用 MenuDto 类型而非 `any[]`），使类型定义与后端数据一致，消除不必要的类型断言。
+ABP 配置字段名说明：ABP 后端 `AbpUserConfigurationDto` 中的导航菜单 JSON 字段名为 `menus`（复数）。根据 ASP.NET Boilerplate 源码（`AbpUserNavConfigDto.cs`），后端类型为 `Dictionary<string, UserMenu>`，即键值对结构（键为菜单分组名称如 MainMenu、AdminMenu 等，值为 UserMenu 对象）。现有代码中 `AbpUserNavConfigDto` 错误地定义了 `menu: any[]`（单数且类型为数组），导致调用方被迫使用 `config.nav?.menus as MenuDto` 的强制断言来弥补类型不一致。重构时必须修正为 `menus: MenuDto`（MenuDto 为键值对接口，等价于 `Record<string, MenuGroupDto | undefined>`，而非数组），使类型定义与后端数据一致，消除不必要的类型断言。
 
 #### Scenario: HTTP 响应拦截器自动解包 AjaxResponse
 - **WHEN** 后端返回 `{ success: true, result: {...}, __abp: true }` 格式的数据
@@ -192,7 +198,7 @@ ABP 配置字段名说明：ABP 后端 `AbpUserConfigurationDto` 中的导航菜
 - TimeoutException：请求超时，提示重试
 - BatchOperationException：批量操作部分失败，弹窗展示详情
 
-错误提示的展示职责由 HTTP 响应拦截器统一承担，而非 API 辅助方法或调用方。拦截器作为默认行为处理器，识别到异常后自动弹出对应的 UI 提示（Toast/Modal）。调用方通过请求选项 `silent: true` 可关闭自动提示，自行处理错误。
+错误提示的展示职责由 HTTP 响应拦截器统一承担，而非 API 辅助方法或调用方。拦截器作为默认行为处理器，识别到异常后自动弹出对应的 UI 提示（Toast/Modal）。调用方通过请求选项 `silent: true` 可关闭自动提示，自行处理错误。注意：`silent` 为新增功能，需在 RequestOptions 接口中新增 `silent?: boolean` 字段，并在拦截器的异常处理逻辑中增加对应判断——当 `silent` 为 true 时跳过自动 UI 提示，仅抛出异常。
 
 #### Scenario: 后端返回业务错误（默认行为）
 - **WHEN** 后端返回 `{ success: false, error: { code: 500, message: "库存不足" } }`
