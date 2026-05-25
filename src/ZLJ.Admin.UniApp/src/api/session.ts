@@ -1,5 +1,6 @@
-import { post } from '@/utils/http'
+import { get } from '@/utils/http'
 
+/** 应用信息 */
 export interface ApplicationInfoDto {
   version: string
   releaseDate: string
@@ -8,6 +9,7 @@ export interface ApplicationInfoDto {
   abpVersion: string
 }
 
+/** 用户登录信息 */
 export interface UserLoginInfoDto {
   id: number
   userName: string
@@ -17,17 +19,20 @@ export interface UserLoginInfoDto {
   phoneNumber: string
 }
 
+/** 租户登录信息 */
 export interface TenantLoginInfoDto {
   id: number
   name: string
 }
 
+/** 获取当前登录信息输出 */
 export interface GetCurrentLoginInformationsOutput {
   application: ApplicationInfoDto
   user: UserLoginInfoDto
   tenant: TenantLoginInfoDto
 }
 
+/** 获取当前登录信息 */
 export function getCurrentLoginInformations(): Promise<GetCurrentLoginInformationsOutput> {
-  return post<GetCurrentLoginInformationsOutput>('api/services/common/Session/GetCurrentLoginInformations', {}, { loading: false })
+  return get<GetCurrentLoginInformationsOutput>('api/services/common/Session/GetCurrentLoginInformations')
 }

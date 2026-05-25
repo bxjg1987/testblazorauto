@@ -1,14 +1,10 @@
 import { getUserConfiguration } from '@/api/config'
 import { getCurrentLoginInformations } from '@/api/session'
-import type { MenuDto } from '@/types/menu'
-import { filterMainMenus } from '@/utils/menu'
-import { useUserStore } from '@/stores/user'
-import { useAppStore } from '@/stores/app'
+import { useUserStore } from '@/store/user'
+import { useAppStore } from '@/store/app'
 import { setApiBaseUrl } from '@/utils/http'
 
-/**
- * 应用初始化服务
- */
+/** 应用初始化服务 */
 export class AppInitializationService {
   private static instance: AppInitializationService
 
@@ -21,25 +17,20 @@ export class AppInitializationService {
     return AppInitializationService.instance
   }
 
-  /**
-   * 登录后初始化应用配置
-   */
-  async initializeAfterLogin(): Promise<void> {
+  /** 应用启动时初始化 */
+  async initializeOnLaunch(): Promise<void> {
     const userStore = useUserStore()
     const appStore = useAppStore()
 
+    userStore.loadTokenFromStorage()
+
     const config = await getUserConfiguration()
     appStore.setAbpConfig(config)
+    appStore.setMenu(config.nav.menus)
 
-    const menu = config.nav?.menus as MenuDto
-    if (menu) {
-      appStore.setMenu(menu)
-    }
-
-    const currentUser = await getCurrentLoginInformations()
-    appStore.setCurrentUser(currentUser)
-
-    if (currentUser.user) {
+    if (userStore.isLoggedIn) {
+      const currentUser = await getCurrentLoginInformations()
+      appStore.setCurrentUser(currentUser)
       userStore.setUserInfo({
         id: currentUser.user.id,
         username: currentUser.user.userName || '',
@@ -50,58 +41,36 @@ export class AppInitializationService {
     }
   }
 
-  /**
-   * 应用启动时初始化
-   */
-  async initializeOnLaunch(): Promise<void> {
+  /** 登录后初始化 */
+  async initializeAfterLogin(): Promise<void> {
     const userStore = useUserStore()
     const appStore = useAppStore()
 
-    userStore.loadTokenFromStorage()
-
     const config = await getUserConfiguration()
     appStore.setAbpConfig(config)
+    appStore.setMenu(config.nav.menus)
 
-    const menu = config.nav?.menus as MenuDto
-    if (menu) {
-      appStore.setMenu(menu)
-    }
-
-    if (userStore.isLoggedIn) {
-      const currentUser = await getCurrentLoginInformations()
-      appStore.setCurrentUser(currentUser)
-
-      if (currentUser.user) {
-        userStore.setUserInfo({
-          id: currentUser.user.id,
-          username: currentUser.user.userName || '',
-          nickname: currentUser.user.name || currentUser.user.userName || '',
-          email: currentUser.user.emailAddress,
-          phone: currentUser.user.phoneNumber,
-        })
-      }
-    }
+    const currentUser = await getCurrentLoginInformations()
+    appStore.setCurrentUser(currentUser)
+    userStore.setUserInfo({
+      id: currentUser.user.id,
+      username: currentUser.user.userName || '',
+      nickname: currentUser.user.name || currentUser.user.userName || '',
+      email: currentUser.user.emailAddress,
+      phone: currentUser.user.phoneNumber,
+    })
   }
 
-  /**
-   * 重新初始化应用（切换API地址时使用）
-   */
+  /** 重新初始化（切换API地址时使用） */
   async reinitialize(apiUrl: string): Promise<void> {
     setApiBaseUrl(apiUrl)
-
     await this.initializeOnLaunch()
-
-    uni.showToast({
-      title: '连接成功',
-      icon: 'success',
-    })
-
+    uni.showToast({ title: '连接成功', icon: 'success' })
     setTimeout(() => {
-      uni.reLaunch({
-        url: '/pages/index/index',
-      })
+      uni.reLaunch({ url: '/pages/index' })
     }, 1000)
   }
 }
 
+/** 应用初始化服务单例 */
 export const appInitializationService = AppInitializationService.getInstance()

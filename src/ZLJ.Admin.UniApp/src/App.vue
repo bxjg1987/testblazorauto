@@ -1,42 +1,29 @@
-<template>
-  <view></view>
-</template>
-
 <script setup lang="ts">
-import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
-import { getApiBaseUrl } from '@/utils/http'
 import { appInitializationService } from '@/services/app-initialization'
+import { getApiBaseUrl } from '@/utils/http'
 
+/** 应用启动时初始化 */
 onLaunch(async () => {
   const apiBaseUrl = getApiBaseUrl()
 
   if (!apiBaseUrl || apiBaseUrl === '/api') {
-    uni.redirectTo({
-      url: '/pages/init/index',
-    })
+    uni.reLaunch({ url: '/pages/init' })
     return
   }
 
   try {
     await appInitializationService.initializeOnLaunch()
-  } catch (error: any) {
-    if (error.name === 'UnauthorizedException' || error.statusCode === 401) {
-      uni.redirectTo({
-        url: '/pages/login/index',
-      })
-    } else {
-      uni.redirectTo({
-        url: '/pages/init/index',
-      })
-    }
+  } catch (error) {
+    console.error('[App] 初始化失败:', error)
   }
 })
-
-onShow(() => {})
-
-onHide(() => {})
 </script>
 
-<style>
-@import './styles/index.css';
+<style lang="scss">
+@use '@wot-ui/ui/styles/theme/index.scss' as *;
+.page-wraper {
+  min-height: calc(100vh - var(--window-top));
+  box-sizing: border-box;
+  background: var(--wot-filled-content);
+}
 </style>

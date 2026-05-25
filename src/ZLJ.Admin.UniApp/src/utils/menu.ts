@@ -1,145 +1,83 @@
-import type { MenuDto, MenuItemDto, MenuItemCustomData } from '@/types/menu'
+import type { MenuDto, MenuItemDto } from '@/types/menu'
+import { MenuShowModel } from '@/types/menu'
+import router from '@/router'
 
-/**
- * 将菜单 URL 转换为页面路径
- * @param url 原始 URL
- * @returns 标准化的页面路径
- */
-export const normalizeMenuUrl = (url: string): string => {
+/** 将ABP后端菜单URL转换为扁平页面路由路径 */
+export function normalizeMenuUrl(url: string): string {
   if (!url) return ''
+  if (url.startsWith('/pages/')) return url
+  if (url.startsWith('/')) return `/pages${url}`
+  return `/pages/${url}`
+}
 
-  let normalizedUrl = url
-
-  if (!normalizedUrl.startsWith('/pages/')) {
-    if (normalizedUrl.startsWith('/')) {
-      normalizedUrl = '/pages' + normalizedUrl
+/** 递归收集所有菜单项 */
+function collectMenuItems(items: MenuItemDto[]): MenuItemDto[] {
+  const result: MenuItemDto[] = []
+  for (const item of items) {
+    if (item.items && item.items.length > 0) {
+      result.push(...collectMenuItems(item.items))
     } else {
-      normalizedUrl = '/pages/' + normalizedUrl
+      result.push(item)
     }
   }
-
-  if (!normalizedUrl.endsWith('/index')) {
-    normalizedUrl = normalizedUrl + '/index'
-  }
-
-  return normalizedUrl
+  return result
 }
 
-/**
- * 过滤出底部导航菜单项 (mobileShowModel === 2 Main 主菜单)
- * @param menu 菜单数据
- * @returns 底部菜单项列表
- */
-export const filterBottomMenus = (menu: MenuDto): MenuItemDto[] => {
-  const result: MenuItemDto[] = []
-
-  function findBottomMenus(items: MenuItemDto[]) {
-    for (const item of items) {
-      const customData = item.customData as MenuItemCustomData | null
-
-      if (customData && customData.mobileShowModel === 2) {
-        result.push(item)
-      }
-
-      if (item.items && item.items.length > 0) {
-        findBottomMenus(item.items)
-      }
+/** 筛选底部导航菜单项（mobileShowModel === 2） */
+export function filterBottomMenus(menu: MenuDto): MenuItemDto[] {
+  const allItems: MenuItemDto[] = []
+  for (const key of Object.keys(menu)) {
+    const group = menu[key]
+    if (group && group.items) {
+      allItems.push(...collectMenuItems(group.items))
     }
   }
-
-  if (menu) {
-    for (const key in menu) {
-      const group = menu[key]
-      if (group && group.items) {
-        findBottomMenus(group.items)
-      }
-    }
-  }
-
-  return result.sort((a, b) => a.order - b.order)
+  return allItems
+    .filter((item) => item.customData?.mobileShowModel === MenuShowModel.Main)
+    .sort((a, b) => a.order - b.order)
 }
 
-/**
- * 过滤出侧边菜单项 (mobileShowModel === 4 Normal 或未设置)
- * @param menu 菜单数据
- * @returns 侧边菜单项列表
- */
-export const filterSideMenus = (menu: MenuDto): MenuItemDto[] => {
-  const result: MenuItemDto[] = []
-
-  function findSideMenus(items: MenuItemDto[]) {
-    for (const item of items) {
-      const customData = item.customData as MenuItemCustomData | null
-
-      const showModel = customData?.mobileShowModel
-      if (!showModel || showModel === 4) {
-        result.push(item)
-      }
-
-      if (item.items && item.items.length > 0) {
-        findSideMenus(item.items)
-      }
+/** 筛选侧边菜单项（mobileShowModel === 4 或未设置） */
+export function filterSideMenus(menu: MenuDto): MenuItemDto[] {
+  const allItems: MenuItemDto[] = []
+  for (const key of Object.keys(menu)) {
+    const group = menu[key]
+    if (group && group.items) {
+      allItems.push(...collectMenuItems(group.items))
     }
   }
-
-  if (menu) {
-    for (const key in menu) {
-      const group = menu[key]
-      if (group && group.items) {
-        findSideMenus(group.items)
-      }
-    }
-  }
-
-  return result.sort((a, b) => a.order - b.order)
+  return allItems
+    .filter(
+      (item) =>
+        item.customData?.mobileShowModel === MenuShowModel.Normal ||
+        item.customData?.mobileShowModel === undefined,
+    )
+    .sort((a, b) => a.order - b.order)
 }
 
-/**
- * 兼容旧方法：过滤出主菜单项
- * @deprecated 使用 filterBottomMenus 代替
- */
-export const filterMainMenus = filterBottomMenus
-
-/**
- * 导航到菜单项对应的页面
- * @param item 菜单项
- * @param onSuccess 成功回调
- * @param onFail 失败回调
- */
-export const navigateToMenuItem = (
+/** 导航到菜单项对应的页面 */
+export function navigateToMenuItem(
   item: MenuItemDto,
   onSuccess?: () => void,
-  onFail?: (err: any) => void
-): void => {
-  if (!item.url) {
-    return
-  }
-
-  const url = normalizeMenuUrl(item.url)
-
-  uni.redirectTo({
-    url,
-    success: () => {
+  onFail?: (err: unknown) => void,
+): void {
+  const path = normalizeMenuUrl(item.url)
+  router
+    .push(path)
+    .then(() => {
       onSuccess?.()
-    },
-    fail: (err) => {
-      uni.showToast({
-        title: '页面不存在',
-        icon: 'none',
-      })
+    })
+    .catch((err: unknown) => {
+      const errMsg = err instanceof Error ? err.message : String(err)
+      if (errMsg.includes('not found') || errMsg.includes('不存在')) {
+        uni.showToast({ title: '页面不存在', icon: 'none' })
+      }
       onFail?.(err)
-    },
-  })
+    })
 }
 
-/**
- * 检查当前页面是否为指定菜单项
- * @param item 菜单项
- * @param currentPath 当前页面路径
- * @returns 是否匹配
- */
-export const isMenuItemActive = (item: MenuItemDto, currentPath: string): boolean => {
-  if (!item.url) return false
-  const normalizedUrl = normalizeMenuUrl(item.url)
-  return currentPath === normalizedUrl
+/** 判断当前页面是否与菜单项匹配 */
+export function isMenuItemActive(item: MenuItemDto, currentPath: string): boolean {
+  const targetPath = normalizeMenuUrl(item.url)
+  return currentPath === targetPath
 }
