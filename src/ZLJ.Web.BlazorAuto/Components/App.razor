@@ -53,22 +53,6 @@
     @* <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script> *@
    
 
-    <script>
-        // WASM缓存有效期验证：若缓存可能已被浏览器LRU淘汰，则删除localStorage标记，让Blazor回退到Server模式
-        (function () {
-            const wasmAssemblyName = 'ZLJ.Admin.CoreRCL';
-            const resourceHashKey = 'blazor-resource-hash:' + wasmAssemblyName;
-            const cacheTimestampKey = 'blazor-cache-timestamp:' + wasmAssemblyName;
-            const maxAgeMs = 12 * 60 * 60 * 1000; // 12小时，可根据实际情况调整
-            if (localStorage.getItem(resourceHashKey)) {
-                const ts = localStorage.getItem(cacheTimestampKey);
-                if (!ts || Date.now() - parseInt(ts) > maxAgeMs) {
-                    localStorage.removeItem(resourceHashKey);
-                    localStorage.removeItem(cacheTimestampKey);
-                }
-            }
-        })();
-    </script>
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="@Assets["app.js"]"></script>
   
